@@ -17,7 +17,7 @@ model = WaveNet()
 model.load_state_dict(torch.load(model_config.model_path, map_location=device))
 model.to(device)
 
-wav, sr = torchaudio.load("LJ001-0004.wav")
+wav, sr = torchaudio.load("LJ045-0097.wav")
 wav = wav.to(device)
 featurizer = MelSpectrogram(MelSpectrogramConfig()).to(device)
 

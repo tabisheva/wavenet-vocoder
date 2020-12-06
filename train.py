@@ -72,6 +72,10 @@ for epoch in range(1, model_config.num_epochs + 1):
         accuracy = (classes == quantized_wavs).sum().item() / classes.shape[-1] / classes.shape[0]
         train_accuracy.append(accuracy)
 
+        if (epoch % 10) == 0:
+            for g in optimizer.param_groups:
+                g['lr'] *= 0.5
+
         optimizer.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1)
@@ -114,4 +118,4 @@ for epoch in range(1, model_config.num_epochs + 1):
 
     if val_loss < best_loss:
         best_loss = val_loss
-        torch.save(model.state_dict(), "wavenet.pth")
+        torch.save(model.state_dict(), "wavenet1.pth")
