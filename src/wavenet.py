@@ -45,12 +45,12 @@ class WaveNetBlock(nn.Module):
     def __init__(self, d):
         super(WaveNetBlock, self).__init__()
 
-        self.dil_sigmoid = CausalConv1d(self.residual_channels, self.residual_channels, self.kernel_size, d)
-        self.dil_tanh = CausalConv1d(self.residual_channels, self.residual_channels, self.kernel_size, d)
-        self.mel_1x1_sigmoid = nn.Conv1d(self.num_mels, self.residual_channels, 1)
-        self.mel_1x1_tanh = nn.Conv1d(self.num_mels, self.residual_channels, 1)
-        self.skip_1x1 = nn.Conv1d(self.residual_channels, self.skip_channels, 1)
-        self.res_1x1 = nn.Conv1d(self.residual_channels, self.residual_channels, 1)
+        self.dil_sigmoid = CausalConv1d(120, 120, 2, d)
+        self.dil_tanh = CausalConv1d(120, 120, 2, d)
+        self.mel_1x1_sigmoid = nn.Conv1d(80, 120, 1)
+        self.mel_1x1_tanh = nn.Conv1d(80, 120, 1)
+        self.skip_1x1 = nn.Conv1d(120, 240, 1)
+        self.res_1x1 = nn.Conv1d(120, 120, 1)
 
     def forward(self, x, h):
         output_sigmoid = self.dil_sigmoid(x)
