@@ -119,9 +119,12 @@ class WaveNet(nn.Module):
         for i in range(audio_len):
             x_input = waveforms[:, -self.receptive_field:]
             h_input = mel[:, :, i:i + x_input.shape[-1]]
+            if x_input.shape[-1] != h_input.shape[-1]:
+                break
             output = self.forward(x_input, h_input, training=False)
-
+            
             quantized_audio = torch.argmax(output[:, :, -1].detach(), dim=1).unsqueeze(-1)
             waveforms = torch.cat([waveforms, decode_mu_law(dequantize(quantized_audio))], dim=1)
-
+            if (i + 1) % 100 == 0:
+                print(i + 1)
         return waveforms[:, -audio_len:]
