@@ -17,16 +17,6 @@ class ModelConfig:
     from_pretrained: bool = False
     lr: float = 0.0001
     num_epochs: int = 20
-    model_path: str = "wavenet2.pth"
-    wandb_log: bool = False
+    model_path: str = "wavenet3.pth"
+    wandb_log: bool = True
     num_channels: int = 80
-
-
-class PostnetConfig:
-    params = [
-        {"in_channels": 80, "out_channels": 512},
-        {"in_channels": 512, "out_channels": 512},
-        {"in_channels": 512, "out_channels": 512},
-        {"in_channels": 512, "out_channels": 512},
-        {"in_channels": 512, "out_channels": 80},
-    ]

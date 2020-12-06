@@ -7,11 +7,11 @@ import wandb
 from sklearn.model_selection import train_test_split
 from src.dataset import LJDataset
 from src.wavenet import WaveNet, encode_mu_law, quantize
-from src.dataset import idxToChar
 from config import ModelConfig
 from src.preprocessing import MelSpectrogram
 from config import MelSpectrogramConfig
 import warnings
+
 warnings.filterwarnings('ignore')
 
 df = pd.read_csv("LJSpeech-1.1/metadata.csv", sep='|', quotechar='`', index_col=0, header=None)
@@ -41,8 +41,8 @@ if model_config.from_pretrained:
 model.to(device)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=model_config.lr)
-# num_steps = len(train_dataloader) * model_config.num_epochs
-# lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_steps, eta_min=0.00001)
+num_steps = len(train_dataloader) * model_config.num_epochs
+lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_steps, eta_min=0.00001)
 
 if model_config.wandb_log:
     wandb.init(project="wavenet")
@@ -76,7 +76,7 @@ for epoch in range(1, model_config.num_epochs + 1):
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1)
         optimizer.step()
-        # lr_scheduler.step()
+        lr_scheduler.step()
         train_losses.append(loss.item())
 
     model.eval()

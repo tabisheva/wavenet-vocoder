@@ -43,27 +43,3 @@ class MelSpectrogram(nn.Module):
             .log_()
 
         return mel
-
-
-def collate_fn(batch):
-    """
-    Stacking sequences of variable lengths in batches
-    :param batch: list of tuples with texts (num_chars, ) and mels (num_channels, T)
-    :return: tensor (batch, max_length of texts) with zero-padded texts,
-             tensor (batch, ) with texts lengths,
-             tensor (batch, num_channels, max_time) with padded mels,
-             tensor (batch, max_time) with padded gates
-             tensor (batch, ) with mel lengths
-    """
-    wavs = [x[:20000] for x in batch]
-    # (B, 20000)
-    wavs_padded = torch.nn.utils.rnn.pad_sequence(wavs, batch_first=True).long()
-
-    return wavs_padded
-
-
-def get_mask_from_lengths(lengths, device):
-    max_len = torch.max(lengths).item()
-    ids = torch.arange(0, max_len, out=torch.LongTensor(max_len)).to(device)
-    mask = (ids < lengths.unsqueeze(1))
-    return mask

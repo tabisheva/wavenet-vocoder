@@ -5,11 +5,6 @@ from src.preprocessing import MelSpectrogram
 from config import MelSpectrogramConfig
 import numpy as np
 
-vocab = " abcdefghijklmnopqrstuvwxyz.,:;-?!"
-
-charToIdx = {c: i for i, c in enumerate(vocab)}
-idxToChar = {i: c for i, c in enumerate(vocab)}
-
 
 class LJDataset(Dataset):
     def __init__(self, df):
